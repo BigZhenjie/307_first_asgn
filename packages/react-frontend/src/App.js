@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Table from './Table';
 
 function App() {
+  const [characters, setCharacters] = useState([
+    {
+      name: "Charlie",
+      job: "Janitor"
+    } // the rest of the data
+  ]);
+
+  function removeOneCharacter(index) {
+    const updated = characters.filter((character, i) => {
+      return i !== index;
+    });
+    setCharacters(updated);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Table
+        characterData={characters}
+        removeCharacter={removeOneCharacter}
+      />
     </div>
   );
 }
