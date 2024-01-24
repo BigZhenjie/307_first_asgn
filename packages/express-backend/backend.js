@@ -2,6 +2,7 @@ import express from "express";
 
 const app = express();
 const port = 8000;
+app.use(express.json());
 
 const users = {
     users_list: [
@@ -60,12 +61,45 @@ app.get("/users/:id", (req, res) => {
     }
 })
 
-app.use(express.json());
-
 app.get("/", (req, res) =>{
     res.send("Hello World");
 })
 
+const addUser = (user) => {
+    users["users_list"].push(user);
+    return user;
+};
+
+app.post("/users", (req, res) => {
+    const userToAdd = req.body;
+    addUser(userToAdd);
+    res.send();
+});
+
+app.delete("/users/:id", (req, res) => {
+    const id = req.params.id;
+    const index = users["users_list"].findIndex(
+        (user) => user["id"] === id
+    );
+    if (index > -1) {
+        users["users_list"].splice(index, 1);
+    }
+    res.send();
+})
+
+const findUserByNameAndJob = (name, job) => {
+    return users["users_list"].filter(
+        (user) => user["name"] === name && user["job"] === job
+    );
+};
+
+app.get("/users", (req, res) => {
+    const name = req.query.name;
+    const job = req.query.job;
+    const result = findUserByNameAndJob(name, job);
+    res.send(result);
+
+})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
