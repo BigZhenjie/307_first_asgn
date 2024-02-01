@@ -5,7 +5,8 @@ const app = express();
 const port = 8000;
 app.use(cors());
 app.use(express.json());
-
+app.use(cors());
+const ids = [];
 const users = {
     users_list: [
         {
@@ -42,6 +43,17 @@ const findUserByName = (name) => {
     );
 };
 
+const idGenerator = () => {
+    let id = Math.random().toString(36)
+    //i am using a while loop here because i want 
+    //to make sure that the id is unique
+    while (id in ids) {
+        id = Math.random().toString(36);
+    }
+    ids.push(id);
+    return id;
+};
+
 app.get("/users", (req, res) => {
     const name = req.query.name;
     if (name != undefined) {
@@ -74,8 +86,9 @@ const addUser = (user) => {
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
+    userToAdd["id"] = idGenerator();
     addUser(userToAdd);
-    res.send();
+    res.status(201).send(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {
@@ -85,8 +98,11 @@ app.delete("/users/:id", (req, res) => {
     );
     if (index > -1) {
         users["users_list"].splice(index, 1);
+        res.status(204).send();
     }
-    res.send();
+    else{
+        res.status(404).send("User not found.");
+    }
 })
 
 const findUserByNameAndJob = (name, job) => {
