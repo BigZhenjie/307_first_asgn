@@ -10,7 +10,8 @@ function App() {
   function fetchUsers(){
     axios.get('http://localhost:8000/users')
     .then(res => {
-      setCharacters(res.data.users_list);
+      console.log(res.data);
+      setCharacters(res.data);
     })
     .catch(err => console.log(err));
   }
@@ -35,7 +36,8 @@ function App() {
         return true;
       }
       else{
-        axios.delete(`http://localhost:8000/users/${character.id}`);
+        console.log(character._id);
+        axios.delete(`http://localhost:8000/users/${character._id}`);
         return false;
       }
     });

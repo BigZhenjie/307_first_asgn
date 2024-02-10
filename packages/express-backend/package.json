@@ -9,5 +9,8 @@
     "start": "nodemon backend.js"
   },
   "author": "Zhenjie Liang",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^8.1.1"
+  }
 }
